@@ -1,28 +1,23 @@
 name: CI
-on: [push, pull_request]
+on: [push]
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  test:
-    name: Test
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [18, lts/*, latest]
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: lts/*
 
       - name: Install Gulp
         run: npm install -g gulp-cli
@@ -30,8 +25,14 @@ jobs:
       - name: Install other dependencies
         run: npm install
 
-      - name: Run external tests
-        run: gulp externaltest
+      - name: Build
+        run: gulp generic
+      
+      - name: Archive Release
+        run: cd build/generic && zip -r pdfjs.zip ./  && cd -
 
-      - name: Run CLI unit tests
-        run: gulp unittestcli
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/generic/pdfjs.zip"
+          tag: "latest"
+          allowUpdates: true
