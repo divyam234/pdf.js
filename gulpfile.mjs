@@ -44,7 +44,6 @@ import Vinyl from "vinyl";
 import webpack2 from "webpack";
 import webpackStream from "webpack-stream";
 import zip from "gulp-zip";
-import TerserPlugin from "terser-webpack-plugin";
 import cleanCss from "gulp-clean-css";
 import minHTML from "gulp-htmlmin"
 
@@ -348,28 +347,6 @@ function createWebpackConfig(
       alias,
     },
     devtool: enableSourceMaps ? "source-map" : undefined,
-    optimization: {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          terserOptions:{
-            compress: {
-              sequences: false,
-            },
-            keep_classnames: true,
-            keep_fnames: true,
-            module: true,
-            format: {
-              comments: false,
-            },
-            compress: {
-              drop_console: true,
-              drop_debugger: true,
-            },
-          }
-        })
-      ],
-    },
     module: {
       rules: [
         {
@@ -1207,6 +1184,7 @@ function buildMinified(defines, dir) {
   return merge([
     createMainBundle(defines).pipe(gulp.dest(dir + "build")),
     createWorkerBundle(defines).pipe(gulp.dest(dir + "build")),
+    createWebBundle(defines,{ defaultPreferencesDir: "minified/" }).pipe(gulp.dest(dir + "web")),
     createSandboxBundle(defines).pipe(gulp.dest(dir + "build")),
     createImageDecodersBundle({ ...defines, IMAGE_DECODERS: true }).pipe(
       gulp.dest(dir + "image_decoders")
@@ -1221,6 +1199,9 @@ async function parseMinified(dir) {
     .toString();
   const pdfSandboxFile = fs
     .readFileSync(dir + "build/pdf.sandbox.mjs")
+    .toString();
+  const viewerFile = fs
+    .readFileSync(dir + "web/viewer.mjs")
     .toString();
   const pdfImageDecodersFile = fs
     .readFileSync(dir + "image_decoders/pdf.image_decoders.mjs")
@@ -1260,6 +1241,10 @@ async function parseMinified(dir) {
     (await minify(pdfSandboxFile, options)).code
   );
   fs.writeFileSync(
+    dir + "web/viewer.min.mjs",
+    (await minify(viewerFile, options)).code
+  );
+  fs.writeFileSync(
     dir + "image_decoders/pdf.image_decoders.min.mjs",
     (await minify(pdfImageDecodersFile, options)).code
   );
@@ -1270,12 +1255,17 @@ async function parseMinified(dir) {
   fs.unlinkSync(dir + "build/pdf.mjs");
   fs.unlinkSync(dir + "build/pdf.worker.mjs");
   fs.unlinkSync(dir + "build/pdf.sandbox.mjs");
+  fs.unlinkSync(dir + "web/viewer.mjs");
 
   fs.renameSync(dir + "build/pdf.min.mjs", dir + "build/pdf.mjs");
   fs.renameSync(dir + "build/pdf.worker.min.mjs", dir + "build/pdf.worker.mjs");
   fs.renameSync(
     dir + "build/pdf.sandbox.min.mjs",
     dir + "build/pdf.sandbox.mjs"
+  );
+  fs.renameSync(
+    dir + "web/viewer.min.mjs",
+    dir + "web/viewer.mjs"
   );
   fs.renameSync(
     dir + "image_decoders/pdf.image_decoders.min.mjs",
@@ -1469,7 +1459,6 @@ gulp.task(
           .pipe(gulp.dest(MOZCENTRAL_CONTENT_DIR + "web")),
 
         gulp.src("l10n/en-US/*.ftl").pipe(gulp.dest(MOZCENTRAL_L10N_DIR)),
-        gulp.src("LICENSE").pipe(gulp.dest(MOZCENTRAL_EXTENSION_DIR)),
         gulp
           .src(FIREFOX_CONTENT_DIR + "PdfJsDefaultPreferences.sys.mjs")
           .pipe(transform("utf8", preprocessDefaultPreferences))
@@ -1555,8 +1544,6 @@ gulp.task(
             ])
           )
           .pipe(gulp.dest(CHROME_BUILD_CONTENT_DIR + "web")),
-
-        gulp.src("LICENSE").pipe(gulp.dest(CHROME_BUILD_DIR)),
         gulp
           .src("extensions/chromium/manifest.json")
           .pipe(replace(/\bPDFJSSCRIPT_VERSION\b/g, version))

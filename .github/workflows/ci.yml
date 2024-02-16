@@ -27,12 +27,14 @@ jobs:
       - name: Install other dependencies
         run: npm install
 
-      - name: Build
-        run: gulp generic
-      
-      - name: Archive Release
-        run: cd build/generic && zip -r pdfjs.zip ./  && cd -
-
+      - name: Prepare Build
+        run: |
+         gulp generic
+         gulp minified
+         rm -rf build/generic/build build/minified/image_decoders 
+         cp -r  build/minified/* build/generic
+         cd build/generic && zip -r pdfjs.zip ./  && cd -
+         
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/generic/pdfjs.zip"
