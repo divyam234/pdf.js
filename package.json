@@ -74,7 +74,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build:generic": "gulp generic && cp _headers build/generic/_headers"
+    "build:generic": "gulp generic && cp _headers build/generic/_headers && cp _redirects build/generic/_redirects"
   },
   "license": "Apache-2.0"
 }
