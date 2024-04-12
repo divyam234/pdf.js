@@ -45,6 +45,8 @@ import Vinyl from "vinyl";
 import webpack2 from "webpack";
 import webpackStream from "webpack-stream";
 import zip from "gulp-zip";
+import cleanCss from "gulp-clean-css";
+import minHTML from "gulp-htmlmin";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -266,9 +268,9 @@ function createWebpackConfig(
   defines,
   output,
   {
-    disableVersionInfo = false,
-    disableSourceMaps = false,
-    disableLicenseHeader = false,
+    disableVersionInfo = true,
+    disableSourceMaps = true,
+    disableLicenseHeader = true,
     defaultPreferencesDir = null,
   } = {}
 ) {
@@ -357,6 +359,13 @@ function createWebpackConfig(
                 keep_classnames: true,
                 keep_fnames: true,
                 module: isModule,
+                format: {
+                  comments: false,
+                },
+                compress: {
+                  drop_console: true,
+                  drop_debugger: true,
+                },
               },
             }),
           ],
@@ -470,7 +479,7 @@ function tweakWebpackOutput(jsName) {
 
 function createMainBundle(defines) {
   const mainFileConfig = createWebpackConfig(defines, {
-    filename: defines.MINIFIED ? "pdf.min.mjs" : "pdf.mjs",
+    filename: "pdf.mjs",
     library: {
       type: "module",
     },
@@ -534,9 +543,7 @@ function createSandboxBundle(defines, extraOptions = undefined) {
   const sandboxFileConfig = createWebpackConfig(
     sandboxDefines,
     {
-      filename: sandboxDefines.MINIFIED
-        ? "pdf.sandbox.min.mjs"
-        : "pdf.sandbox.mjs",
+      filename: "pdf.sandbox.mjs",
       library: {
         type: "module",
       },
@@ -552,7 +559,7 @@ function createSandboxBundle(defines, extraOptions = undefined) {
 
 function createWorkerBundle(defines) {
   const workerFileConfig = createWebpackConfig(defines, {
-    filename: defines.MINIFIED ? "pdf.worker.min.mjs" : "pdf.worker.mjs",
+    filename: "pdf.worker.mjs",
     library: {
       type: "module",
     },
@@ -1039,7 +1046,6 @@ function buildGeneric(defines, dir) {
         : "generic-legacy/",
     }).pipe(gulp.dest(dir + "web")),
     gulp.src(COMMON_WEB_FILES, { base: "web/" }).pipe(gulp.dest(dir + "web")),
-    gulp.src("LICENSE").pipe(gulp.dest(dir)),
     gulp
       .src(["web/locale/*/viewer.ftl", "web/locale/locale.json"], {
         base: "web/",
@@ -1048,7 +1054,14 @@ function buildGeneric(defines, dir) {
     createCMapBundle().pipe(gulp.dest(dir + "web/cmaps")),
     createStandardFontBundle().pipe(gulp.dest(dir + "web/standard_fonts")),
 
-    preprocessHTML("web/viewer.html", defines).pipe(gulp.dest(dir + "web")),
+    preprocessHTML("web/viewer.html", defines)
+      .pipe(
+        minHTML({
+          collapseWhitespace: true,
+          removeComments: true,
+        })
+      )
+      .pipe(gulp.dest(dir + "web")),
     preprocessCSS("web/viewer.css", defines)
       .pipe(
         postcss([
@@ -1059,8 +1072,8 @@ function buildGeneric(defines, dir) {
           autoprefixer(AUTOPREFIXER_CONFIG),
         ])
       )
+      .pipe(cleanCss())
       .pipe(gulp.dest(dir + "web")),
-
     gulp
       .src("web/compressed.tracemonkey-pldi-09.pdf")
       .pipe(gulp.dest(dir + "web")),
@@ -1087,7 +1100,7 @@ gulp.task(
     function createGeneric() {
       console.log();
       console.log("### Creating generic viewer");
-      const defines = { ...DEFINES, GENERIC: true };
+      const defines = { ...DEFINES, GENERIC: true, MINIFIED: true };
 
       return buildGeneric(defines, GENERIC_DIR);
     }
