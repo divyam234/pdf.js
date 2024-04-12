@@ -114,20 +114,20 @@ function composePage(
 }
 
 class FirefoxPrintService {
-  constructor(
+  constructor({
     pdfDocument,
     pagesOverview,
     printContainer,
     printResolution,
-    optionalContentConfigPromise = null,
-    printAnnotationStoragePromise = null
-  ) {
+    printAnnotationStoragePromise = null,
+  }) {
     this.pdfDocument = pdfDocument;
     this.pagesOverview = pagesOverview;
     this.printContainer = printContainer;
     this._printResolution = printResolution || 150;
-    this._optionalContentConfigPromise =
-      optionalContentConfigPromise || pdfDocument.getOptionalContentConfig();
+    this._optionalContentConfigPromise = pdfDocument.getOptionalContentConfig({
+      intent: "print",
+    });
     this._printAnnotationStoragePromise =
       printAnnotationStoragePromise || Promise.resolve();
   }
@@ -202,22 +202,8 @@ class PDFPrintServiceFactory {
     return shadow(this, "supportsPrinting", "mozPrintCallback" in canvas);
   }
 
-  static createPrintService(
-    pdfDocument,
-    pagesOverview,
-    printContainer,
-    printResolution,
-    optionalContentConfigPromise,
-    printAnnotationStoragePromise
-  ) {
-    return new FirefoxPrintService(
-      pdfDocument,
-      pagesOverview,
-      printContainer,
-      printResolution,
-      optionalContentConfigPromise,
-      printAnnotationStoragePromise
-    );
+  static createPrintService(params) {
+    return new FirefoxPrintService(params);
   }
 }
 

@@ -2563,6 +2563,13 @@
     "type": "eq"
   },
   {
+    "id": "issue17848",
+    "file": "pdfs/issue17848.pdf",
+    "md5": "9a5b7ee97e1e03ad506115f15f9b57af",
+    "rounds": 1,
+    "type": "eq"
+  },
+  {
     "id": "personwithdog",
     "file": "pdfs/personwithdog.pdf",
     "md5": "cd68fb2ce00dab97801b3e51495b99e3",
@@ -3715,6 +3722,60 @@
     "type": "eq"
   },
   {
+    "id": "issue17679-initial-oc",
+    "file": "pdfs/issue17679.pdf",
+    "md5": "2a7ce8b31a751a0cb829863aa6cf553a",
+    "rounds": 1,
+    "type": "eq"
+  },
+  {
+    "id": "issue17679-no-green-oc",
+    "file": "pdfs/issue17679.pdf",
+    "md5": "2a7ce8b31a751a0cb829863aa6cf553a",
+    "rounds": 1,
+    "type": "eq",
+    "optionalContent": {
+      "6R": false
+    }
+  },
+  {
+    "id": "issue17679-no-red-oc",
+    "file": "pdfs/issue17679.pdf",
+    "md5": "2a7ce8b31a751a0cb829863aa6cf553a",
+    "rounds": 1,
+    "type": "eq",
+    "optionalContent": {
+      "7R": false
+    }
+  },
+  {
+    "id": "issue17679_2-initial-oc",
+    "file": "pdfs/issue17679_2.pdf",
+    "md5": "17f145098ea35d63f3fa7389716c1aca",
+    "rounds": 1,
+    "type": "eq"
+  },
+  {
+    "id": "issue17679_2-no-green-oc",
+    "file": "pdfs/issue17679_2.pdf",
+    "md5": "17f145098ea35d63f3fa7389716c1aca",
+    "rounds": 1,
+    "type": "eq",
+    "optionalContent": {
+      "6R": false
+    }
+  },
+  {
+    "id": "issue17679_2-no-red-oc",
+    "file": "pdfs/issue17679_2.pdf",
+    "md5": "17f145098ea35d63f3fa7389716c1aca",
+    "rounds": 1,
+    "type": "eq",
+    "optionalContent": {
+      "7R": false
+    }
+  },
+  {
     "id": "issue1127-text",
     "file": "pdfs/issue1127.pdf",
     "md5": "4fb2be5ffefeafda4ba977de2a1bb4d8",
@@ -3793,6 +3854,14 @@
     "id": "annotation-caret-ink",
     "file": "pdfs/annotation-caret-ink.pdf",
     "md5": "6218ca235580d1975474c979e0128c2d",
+    "rounds": 1,
+    "type": "eq",
+    "annotations": true
+  },
+  {
+    "id": "issue17904",
+    "file": "pdfs/issue17904.pdf",
+    "md5": "4b8f0b565a61bf068ef72d232c997cef",
     "rounds": 1,
     "type": "eq",
     "annotations": true
@@ -3961,6 +4030,23 @@
     "firstPage": 5,
     "lastPage": 5,
     "type": "eq"
+  },
+  {
+    "id": "bug1826783-display",
+    "file": "pdfs/bug1826783.pdf",
+    "md5": "93e706efee15dd7b32d32d66f15a3ea2",
+    "rounds": 1,
+    "link": true,
+    "type": "eq"
+  },
+  {
+    "id": "bug1826783-print",
+    "file": "pdfs/bug1826783.pdf",
+    "md5": "93e706efee15dd7b32d32d66f15a3ea2",
+    "rounds": 1,
+    "link": true,
+    "type": "eq",
+    "print": true
   },
   {
     "id": "issue8586",
@@ -9681,6 +9767,71 @@
     "file": "pdfs/issue17671.pdf",
     "md5": "407695b36b4611bc7c501a891c8a4b28",
     "rounds": 1,
+    "type": "eq"
+  },
+  {
+    "id": "issue17689",
+    "file": "pdfs/issue17689.pdf",
+    "md5": "2d260d3795e551fa047eef7c3dbab45b",
+    "rounds": 1,
+    "link": true,
+    "firstPage": 2,
+    "lastPage": 2,
+    "type": "eq"
+  },
+  {
+    "id": "issue17730",
+    "file": "pdfs/issue17730.pdf",
+    "md5": "ac9a14a75457468bde78204ca75701d6",
+    "rounds": 1,
+    "annotations": true,
+    "type": "eq"
+  },
+  {
+    "id": "issue17794",
+    "file": "pdfs/issue17794.pdf",
+    "md5": "a66b5b938cb44ae241cad845cc3b5d2d",
+    "rounds": 1,
+    "link": true,
+    "type": "eq"
+  },
+  {
+    "id": "issue17856",
+    "file": "pdfs/issue17856.pdf",
+    "md5": "b31e5258948f0f4bb99eb5d4127c2162",
+    "rounds": 1,
+    "link": true,
+    "type": "other"
+  },
+  {
+    "id": "issue17808",
+    "file": "pdfs/issue17808.pdf",
+    "md5": "dd66194bdaa0f62bc96c760384f2e098",
+    "rounds": 1,
+    "type": "eq"
+  },
+  {
+    "id": "issue17871_bottom_right",
+    "file": "pdfs/issue17871_bottom_right.pdf",
+    "md5": "664807166c5279224abfbf259f701958",
+    "rounds": 1,
+    "type": "eq"
+  },
+  {
+    "id": "issue17871_top_right",
+    "file": "pdfs/issue17871_top_right.pdf",
+    "md5": "07d95eabf18aee0cf38f09eb7b1390ec",
+    "rounds": 1,
+    "type": "eq"
+  },
+  {
+    "id": "issue17906",
+    "file": "pdfs/issue17906.pdf",
+    "md5": "f81c617e5113e0c510a4cfe8b012798e",
+    "rounds": 1,
+    "link": true,
+    "firstPage": 1,
+    "lastPage": 1,
     "type": "eq"
   }
 ]
