@@ -2208,56 +2208,56 @@ if (typeof PDFJSDev === "undefined" || !PDFJSDev.test("MOZCENTRAL")) {
   PDFPrintServiceFactory.initGlobals(PDFViewerApplication);
 }
 
-// if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
-//   const HOSTED_VIEWER_ORIGINS = [
-//     "null",
-//     "http://mozilla.github.io",
-//     "https://mozilla.github.io",
-//   ];
-//   // eslint-disable-next-line no-var
-//   var validateFileURL = function (file) {
-//     if (!file) {
-//       return;
-//     }
-//     try {
-//       const viewerOrigin = new URL(window.location.href).origin || "null";
-//       if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
-//         // Hosted or local viewer, allow for any file locations
-//         return;
-//       }
-//       const fileOrigin = new URL(file, window.location.href).origin;
-//       // Removing of the following line will not guarantee that the viewer will
-//       // start accepting URLs from foreign origin -- CORS headers on the remote
-//       // server must be properly configured.
-//       if (fileOrigin !== viewerOrigin) {
-//         throw new Error("file origin does not match viewer's");
-//       }
-//     } catch (ex) {
-//       PDFViewerApplication._documentError("pdfjs-loading-error", {
-//         message: ex.message,
-//       });
-//       throw ex;
-//     }
-//   };
+if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
+  const HOSTED_VIEWER_ORIGINS = [
+    "null",
+    "http://mozilla.github.io",
+    "https://mozilla.github.io",
+  ];
+  // eslint-disable-next-line no-var
+  var validateFileURL = function (file) {
+    if (!file) {
+      return;
+    }
+    try {
+      const viewerOrigin = new URL(window.location.href).origin || "null";
+      if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
+        // Hosted or local viewer, allow for any file locations
+        return;
+      }
+      const fileOrigin = new URL(file, window.location.href).origin;
+      // Removing of the following line will not guarantee that the viewer will
+      // start accepting URLs from foreign origin -- CORS headers on the remote
+      // server must be properly configured.
+      if (fileOrigin !== viewerOrigin) {
+        throw new Error("file origin does not match viewer's");
+      }
+    } catch (ex) {
+      PDFViewerApplication._documentError("pdfjs-loading-error", {
+        message: ex.message,
+      });
+      throw ex;
+    }
+  };
 
-//   // eslint-disable-next-line no-var
-//   var onFileInputChange = function (evt) {
-//     if (this.pdfViewer?.isInPresentationMode) {
-//       return; // Opening a new PDF file isn't supported in Presentation Mode.
-//     }
-//     const file = evt.fileInput.files[0];
+  // eslint-disable-next-line no-var
+  var onFileInputChange = function (evt) {
+    if (this.pdfViewer?.isInPresentationMode) {
+      return; // Opening a new PDF file isn't supported in Presentation Mode.
+    }
+    const file = evt.fileInput.files[0];
 
-//     this.open({
-//       url: URL.createObjectURL(file),
-//       originalUrl: file.name,
-//     });
-//   };
+    this.open({
+      url: URL.createObjectURL(file),
+      originalUrl: file.name,
+    });
+  };
 
-//   // eslint-disable-next-line no-var
-//   var onOpenFile = function (evt) {
-//     this._openFileInput?.click();
-//   };
-// }
+  // eslint-disable-next-line no-var
+  var onOpenFile = function (evt) {
+    this._openFileInput?.click();
+  };
+}
 
 function onPageRender({ pageNumber }) {
   // If the page is (the most) visible when it starts rendering,
